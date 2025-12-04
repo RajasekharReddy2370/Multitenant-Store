@@ -281,3 +281,108 @@ This backend supports:
 ✔ Role-based access
 ✔ Staff assignment
 ✔ Customer order tracking
+
+
+The following are the payloads
+http://127.0.0.1:8000/api/auth/register/
+
+For registering Vendor
+// {
+//   "username": "owner3",
+//   "email": "owner3@store.com",
+//   "password": "password123",
+//   "role": "owner",
+//   "vendor_domain": "vendor3.example.com",
+//   "first_name": "Alice3",
+//   "last_name": "Owner"
+// }
+
+
+
+X-Tenant-Domain : is required for creating staff 
+For registering Staff
+// {
+//   "username": "vendor3_staff2",
+//   "email": "staff2@vendor3.com",
+//   "password": "password123",
+//   "role": "staff",
+//   "first_name": "Staff",
+//   "last_name": "two"
+// }
+
+X-Tenant-Domain : is required for creating customer 
+For registering Customer
+http://127.0.0.1:8000/api/auth/register/ [POST]
+{
+  "username": "vendor3_customer3",
+  "email": "customer3@vendor3.com",
+  "password": "password123",
+  "role": "customer",
+  "first_name": "Customer",
+  "last_name": "three"
+}
+
+
+
+For Login :-
+http://127.0.0.1:8000/api/auth/login/ [POST]
+{
+  "username": "vendor1_customer1",
+  "password": "password123"
+}
+
+
+
+
+For Creating Products :-
+X-Tenant-Domain : is required for creating customer (vendor domain)
+Authorization jwt is required
+http://127.0.0.1:8000/api/products/ [POST]
+{
+  "name": "Vendor3 Product C",
+  "description": "Eco-friendly product C.",
+  "price": "45.99",
+  "stock": 35
+}
+
+
+For Customer Placing Order
+X-Tenant-Domain : is required for creating customer (vendor domain)
+Authorization customer jwt is required
+http://127.0.0.1:8000/api/orders/ [POST]
+{
+    "items": [
+        {
+            "product": 1,
+            "quantity": 2
+        },
+        {
+            "product": 3,
+            "quantity": 1
+        }
+    ],
+    "address": "123 Main Street"
+}
+
+To see vendor/Store orders :-
+X-Tenant-Domain : is required for creating customer (vendor domain)
+Authorization owner jwt is required
+http://127.0.0.1:8000/api/orders/
+
+To give status for an order :-
+http://127.0.0.1:8000/api/orders/1/status/ [PATCH]
+{
+    "status": "processing"
+}
+
+To Assign Staff to particular Order :-
+X-Tenant-Domain : is required for creating customer (vendor domain)
+Authorization owner jwt is required
+http://127.0.0.1:8000/api/orders/1/assign-staff/ [PATCH]
+{
+    "staff_id": 5
+}
+
+
+
+
